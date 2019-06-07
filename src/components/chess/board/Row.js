@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Squares from './Squares';
 import './Row.css';
 
-    const whiteRowArr = ['white', 'black','white', 'black','white', 'black','white', 'black'];
-    const blackRowArr = ['black','white', 'black','white', 'black','white', 'black', 'white'];
+    const whiteRowArr = ['#eeeed2', '#769656','#eeeed2', '#769656','#eeeed2', '#769656','#eeeed2', '#769656'];
+    const blackRowArr = ['#769656','#eeeed2', '#769656','#eeeed2', '#769656','#eeeed2', '#769656', '#eeeed2'];
     const columnId = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
 export default class Row extends Component {
@@ -18,7 +18,7 @@ export default class Row extends Component {
 
     render() {
         return (
-            <div>
+            <div className='individual-row'>
                 {columnId.map((id, i) => (
                     <Squares 
                     key={i}

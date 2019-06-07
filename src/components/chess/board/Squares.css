@@ -7,3 +7,18 @@
     border: 0;
     color: #FF7F50;
 }
+
+.square-id {
+    font-size: 15px;
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+
+}
+
+/* .individual-square > img {
+    margin-bottom: -45px;
+} */
