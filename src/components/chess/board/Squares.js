@@ -17,10 +17,16 @@ import rookLt from '../../../assets/Chess_rlt60.png';
 export default class Squares extends Component {
     constructor(props) {
       super(props);
-      this.state = {date: new Date()};
+      this.state = {
+          selectedSquare: false
+        };
     }
   
-    
+    handleClick = () => {
+        this.setState({
+            selectedSquare: !this.state.selectedSquare
+        });
+    }
 
     piecesPlacement( squareId ) {
         switch(squareId) {
@@ -68,9 +74,8 @@ export default class Squares extends Component {
             case 'g2':
             case 'h2':
               return <img src={pawnLt} alt={'Pawn Light'} value={squareId} />;
-  
             default:
-              console.log('bullocks')
+                return <img src={''} alt={''} value={squareId} />
         }
       }
       
@@ -82,14 +87,13 @@ export default class Squares extends Component {
           
         return (
             <div 
-                className='individual-square' 
+                onClick={this.handleClick}
+                className={this.state.selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
                 style={{backgroundColor: squareColor}} 
                 value={oneLtrColumnId.concat(snglDigRowId)}
             >
                 <p className='square-id'>{oneLtrColumnId.concat(snglDigRowId)}</p>
 
-                {/* <img src={snglDigRowId === '7' ? pawnDk : ''} />
-                <img src={snglDigRowId === '2' ? pawnLt : ''} /> */}
                 {this.piecesPlacement(oneLtrColumnId.concat(snglDigRowId))}
                 
             </div>

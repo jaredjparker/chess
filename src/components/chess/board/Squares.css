@@ -19,6 +19,6 @@
 
 }
 
-/* .individual-square > img {
-    margin-bottom: -45px;
-} */
+.selected-square {
+    background-color: #F0F8FF !important;
+}
