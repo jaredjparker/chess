@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { switchPlayerMove, testFire } from '../../../reducers/pieces';
 import './Squares.css';
 import pawnDk from '../../../assets/Chess_pdt60.png';
 import pawnLt from '../../../assets/Chess_plt60.png';
@@ -21,11 +22,13 @@ export default class Squares extends Component {
           selectedSquare: false
         };
     }
+
   
     handleClick = () => {
         this.setState({
             selectedSquare: !this.state.selectedSquare
-        });
+        })
+        
     }
 
     piecesPlacement( squareId ) {
