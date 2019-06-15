@@ -19,7 +19,6 @@ export default class Board extends Component {
         this.setState({
             selectedPiece: squareId
         })
-
     }
 
     render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { validSquareSelect, unselectSquare } from '../../../actions/gameActions';
+import { validSquareSelect, unselectSquare, openMove } from '../../../actions/gameActions';
 import boardValues from '../../../centralState/boardValues';
 import './Squares.css';
 
@@ -93,6 +93,7 @@ export default class Squares extends Component {
 
     handleClick = () => {
       this.props.squareSendSelectedPiece(this.state.squareInfo);
+      openMove();
       console.log(this.state.squareInfo);
     }
 
