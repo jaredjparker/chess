@@ -5,16 +5,35 @@ import './Board.css';
 const rowNumberArr=['8', '7', '6', '5', '4', '3', '2', '1']
 
 export default class Board extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedPiece: '',
+            legalMoves: []
+        }
+    }
+
+    activePiece = (squareId) => {
+        this.setState({
+            selectedPiece: squareId
+        })
+
+    }
+
     render() {
         return (
             <div className="board-wrapper">
                 {rowNumberArr.map((rowId, i) => (
                     <Row 
                     key={i}
+                    sendSelectedPiece={this.activePiece}
                     numberedRowStr={rowId}
-                    rowColorBool={parseInt(rowId, 10) % 2 === 0} />
+                    rowColorBool={parseInt(rowId, 10) % 2 === 0}
+                    boardClkFnctn={this.handleClick}
+                     />
                 ))}
-                
             </div>
         )
     }

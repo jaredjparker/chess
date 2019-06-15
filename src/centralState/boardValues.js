@@ -12,24 +12,40 @@ import Rook_Dark from '../assets/Chess_rdt60.png';
 import Rook_Light from '../assets/Chess_rlt60.png';
 import Empty from '../assets/Empty.png';
 
-// INITIAL STATE
+// BOARD VALUES
 const boardValues = {
     a8: Rook_Dark,
+    a8SquareInfo: 'Rook_Dark',
     b8: Knight_Dark,
+    b8SquareInfo: 'Knight_Dark',
     c8: Bishop_Dark,
+    c8SquareInfo: 'Bishop_Dark',
     d8: King_Dark,
+    d8SquareInfo: 'King_Dark',
     e8: Queen_Dark,
+    e8SquareInfo: 'Queen_Dark',
     f8: Bishop_Dark,
+    f8SquareInfo: 'Bishop_Dark',
     g8: Knight_Dark,
+    g8SquareInfo: 'Knight_Dark',
     h8: Rook_Dark,
+    h8SquareInfo: 'Rook_Dark',
     a7: Pawn_Dark,
+    a7SquareInfo: 'Pawn_Dark',
     b7: Pawn_Dark,
+    b7SquareInfo: 'Pawn_Dark',
     c7: Pawn_Dark,
+    c7SquareInfo: 'Pawn_Dark',
     d7: Pawn_Dark,
+    d7SquareInfo: 'Pawn_Dark',
     e7: Pawn_Dark,
+    e7SquareInfo: 'Pawn_Dark',
     f7: Pawn_Dark,
+    f7SquareInfo: 'Pawn_Dark',
     g7: Pawn_Dark,
+    g7SquareInfo: 'Pawn_Dark',
     h7: Pawn_Dark,
+    h7SquareInfo: 'Pawn_Dark',
     a6: Empty,
     a6SquareInfo: 'Empty',
     b6: Empty,
@@ -111,13 +127,21 @@ const boardValues = {
     h2: Pawn_Light,
     h2SquareInfo: 'Pawn_Light',
     a1: Rook_Light,
+    a1SquareInfo: 'Rook_Light',
     b1: Knight_Light,
+    b1SquareInfo: 'Knight_Light',
     c1: Bishop_Light,
+    c1SquareInfo: 'Bishop_Light',
     d1: King_Light,
+    d1SquareInfo: 'King_Light',
     e1: Queen_Light,
+    e1SquareInfo: 'Queen_Light',
     f1: Bishop_Light,
+    f1SquareInfo: 'Bishop_Light',
     g1: Knight_Light,
-    h1: Rook_Light
+    g1SquareInfo: 'Knight_Light',
+    h1: Rook_Light,
+    h1SquareInfo: 'Rook_Light'
 }
 
 export default boardValues;

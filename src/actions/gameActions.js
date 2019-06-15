@@ -1,18 +1,18 @@
-import initialState from '../centralState/gameState';
+import initialState from '../centralState/initialState';
 import boardValues from '../centralState/boardValues';
 
-import Pawn_Dark from '../assets/Chess_pdt60.png';
+// import Pawn_Dark from '../assets/Chess_pdt60.png';
 import Pawn_Light from '../assets/Chess_plt60.png';
-import Bishop_Dark from '../assets/Chess_bdt60.png';
-import Bishop_Light from '../assets/Chess_blt60.png';
-import King_Dark from '../assets/Chess_kdt60.png';
-import King_Light from '../assets/Chess_klt60.png';
-import Knight_Dark from '../assets/Chess_ndt60.png';
-import Knight_Light from '../assets/Chess_nlt60.png';
-import Queen_Dark from '../assets/Chess_qdt60.png';
-import Queen_Light from '../assets/Chess_qlt60.png';
-import Rook_Dark from '../assets/Chess_rdt60.png';
-import Rook_Light from '../assets/Chess_rlt60.png';
+// import Bishop_Dark from '../assets/Chess_bdt60.png';
+// import Bishop_Light from '../assets/Chess_blt60.png';
+// import King_Dark from '../assets/Chess_kdt60.png';
+// import King_Light from '../assets/Chess_klt60.png';
+// import Knight_Dark from '../assets/Chess_ndt60.png';
+// import Knight_Light from '../assets/Chess_nlt60.png';
+// import Queen_Dark from '../assets/Chess_qdt60.png';
+// import Queen_Light from '../assets/Chess_qlt60.png';
+// import Rook_Dark from '../assets/Chess_rdt60.png';
+// import Rook_Light from '../assets/Chess_rlt60.png';
 import Empty from '../assets/Empty.png';
 
 // ACTION CREATORS
@@ -22,8 +22,10 @@ export function switchPlayerMove() {
 }
 
 export function movePiece() {
-    boardValues.d2 = Empty;
-    boardValues.d4 = Pawn_Light;
+    boardValues.e2 = Empty;
+    boardValues.e4 = Pawn_Light;
+    boardValues.e2SquareInfo = 'Empty';
+    boardValues.e4SquareInfo = 'Pawn_Light';
     return true
 }
 
@@ -49,4 +51,9 @@ export function validSquareSelect(squareData) {
         return true
     } 
         
+}
+
+export function unselectSquare() {
+    initialState.moveOpen = false
+    initialState.squareSelected = ''
 }

@@ -8,7 +8,7 @@
     color: #000000;
 }
 
-.square-id {
+.individual-square > p {
     font-size: 15px;
     display: block;
     position: relative;
@@ -16,7 +16,11 @@
     left: 0;
     margin: 0;
     padding: 0;
+    margin-left: 2px;
+}
 
+.individual-square > img {
+    margin-left: 13px;
 }
 
 .selected-square {

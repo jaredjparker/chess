@@ -22,6 +22,7 @@ export default class Row extends Component {
                 {columnId.map((id, i) => (
                     <Squares 
                     key={i}
+                    squareSendSelectedPiece={this.props.sendSelectedPiece}
                     snglDigRowId={this.props.numberedRowStr}
                     squareColor={this.state.colorBool === true ? whiteRowArr[i] : blackRowArr[i]} 
                     oneLtrColumnId={id} />
