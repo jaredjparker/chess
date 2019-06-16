@@ -33,26 +33,36 @@ export function validSquareSelect(squareData) {
     let snip = squareData.length;
 
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === '') {
-        console.log('Valid Square has been seleceted.')
+        console.log('Hovering over Valid Square')
         initialState.squareSelected = squareData.substring(snip - 2)
         return initialState.squareSelected
     } 
     else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === '') {
-        console.log('Valid Square has been seleceted.')
+        console.log('Hovering over Valid Square')
         initialState.squareSelected = squareData.substring(snip - 2)
         return initialState.squareSelected
     } 
-    // else if (initialState.squareSelected === squareData.substring(snip - 2)) {
-    //     console.log('Square has been unselected')
-    //     initialState.moveOpen = false
-    //     initialState.squareSelected = ''
-    //     return true
-    // } 
-        
+}
+
+export function checkSelectedSquare(squareData) {
+    let snip = squareData.length;
+
+    if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === squareData.substring(snip - 2)) {
+        console.log('Valid Square has been seleceted.')
+        openMove();
+        initialState.pieceSelected = squareData
+        return initialState.pieceSelected
+    } 
+    else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === squareData.substring(snip - 2)) {
+        console.log('Valid Square has been seleceted.')
+        openMove();
+        initialState.pieceSelected = squareData
+        return initialState.pieceSelected
+    } 
 }
 
 export function unselectSquare() {
-    initialState.squareSelected = ''
+    if (initialState.moveOpen === false) {initialState.squareSelected = ''}
 }
 
 export function openMove() {

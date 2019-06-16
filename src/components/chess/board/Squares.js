@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { validSquareSelect, unselectSquare, openMove } from '../../../actions/gameActions';
+import { validSquareSelect, unselectSquare, checkSelectedSquare } from '../../../actions/gameActions';
 import boardValues from '../../../centralState/boardValues';
+import initialState from '../../../centralState/initialState';
 import './Squares.css';
 
 
@@ -18,7 +19,8 @@ export default class Squares extends Component {
           squareImage: boardValues[stateSquareId],
           rowId: this.props.snglDigRowId,
           columnId: this.props.oneLtrColumnId,
-          squareId: stateSquareId
+          squareId: stateSquareId,
+          selectedForMove: false
         };
     }
 
@@ -78,7 +80,7 @@ export default class Squares extends Component {
     handleMouseEnter = () => {
       const squareId = `${this.props.oneLtrColumnId}${this.props.snglDigRowId}`;
 
-      validSquareSelect(this.state.squareInfo) ? this.setState({selectedSquare: !this.state.selectedSquare}) : console.log('Invalid Selection');
+      validSquareSelect(this.state.squareInfo) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection');
 
       this.setState({
         squareImage: boardValues[squareId],
@@ -92,9 +94,16 @@ export default class Squares extends Component {
     }
 
     handleClick = () => {
-      this.props.squareSendSelectedPiece(this.state.squareInfo);
-      openMove();
-      console.log(this.state.squareInfo);
+      const { selectedForMove, selectedSquare, squareInfo } = this.state;
+
+      console.log(selectedForMove, squareInfo, initialState.pieceSelected)
+
+      if (selectedForMove === false && initialState.pieceSelected !== squareInfo) {
+        this.props.squareSendSelectedPiece(this.state.squareInfo);
+        checkSelectedSquare(this.state.squareInfo) ? this.setState({selectedForMove : true, selectedSquare: false}) : alert('Please select a valid piece')
+      } else if (selectedForMove === true && selectedSquare === false && initialState.pieceSelected === squareInfo) {
+        console.log(initialState.pieceSelected, 'second condition fired')
+      }
     }
 
     piecesPlacement( squareId ) {
@@ -162,7 +171,7 @@ export default class Squares extends Component {
                 onMouseLeave={this.handleMouseLeave}
                 onClick={this.handleClick}
                 className={this.state.selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
-                style={{backgroundColor: squareColor}} 
+                style={this.state.selectedForMove ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
                 value={`${oneLtrColumnId}${snglDigRowId}`}
             >
                 <p>{`${oneLtrColumnId}${snglDigRowId}`}</p>
