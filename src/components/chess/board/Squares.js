@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { validSquareSelect, unselectSquare, checkSelectedSquare } from '../../../actions/gameActions';
+import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected } from '../../../actions/gameActions';
 import boardValues from '../../../centralState/boardValues';
 import initialState from '../../../centralState/initialState';
 import './Squares.css';
@@ -100,9 +100,15 @@ export default class Squares extends Component {
 
       if (selectedForMove === false && initialState.pieceSelected !== squareInfo) {
         this.props.squareSendSelectedPiece(this.state.squareInfo);
-        checkSelectedSquare(this.state.squareInfo) ? this.setState({selectedForMove : true, selectedSquare: false}) : alert('Please select a valid piece')
+        checkSelectedSquare(this.state.squareInfo) ? this.setState({selectedForMove: true, selectedSquare: false}) : alert('Please select a valid piece')
       } else if (selectedForMove === true && selectedSquare === false && initialState.pieceSelected === squareInfo) {
         console.log(initialState.pieceSelected, 'second condition fired')
+        resetOpenMove()
+        resetPieceSelected()
+        this.setState({
+          selectedForMove: false,
+          selectedSquare: true
+        })
       }
     }
 

@@ -68,3 +68,11 @@ export function unselectSquare() {
 export function openMove() {
     initialState.moveOpen = true
 }
+
+export function resetOpenMove() {
+    initialState.moveOpen = false
+}
+
+export function resetPieceSelected() {
+    initialState.pieceSelected = ''
+}
