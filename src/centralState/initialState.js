@@ -1,8 +1,9 @@
 // INITIAL STATE
 const initialState = {
-    playerOneMove: true,
+    playerOneMove: false,
     squareSelected: '',
     pieceSelected: '',
+    holdingPiece: '',
     moveOpen: false,
     moveClose: false,
     validMoves: []

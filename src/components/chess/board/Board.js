@@ -21,12 +21,20 @@ export default class Board extends Component {
         })
     }
 
+    populateViableMoves = () => {
+        const boardLegalMoves = ['e3', 'e4'];
+        this.setState({ legalMoves: boardLegalMoves });
+        return boardLegalMoves;
+    }
+
     render() {
         return (
             <div className="board-wrapper">
                 {rowNumberArr.map((rowId, i) => (
                     <Row 
                     key={i}
+                    rowLegalMoves={this.populateViableMoves}
+                    rowStatefulMoves={this.state.legalMoves}
                     sendSelectedPiece={this.activePiece}
                     numberedRowStr={rowId}
                     rowColorBool={parseInt(rowId, 10) % 2 === 0}

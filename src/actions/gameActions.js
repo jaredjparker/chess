@@ -1,32 +1,24 @@
 import initialState from '../centralState/initialState';
 import boardValues from '../centralState/boardValues';
 
-// import Pawn_Dark from '../assets/Chess_pdt60.png';
+import Pawn_Dark from '../assets/Chess_pdt60.png';
 import Pawn_Light from '../assets/Chess_plt60.png';
-// import Bishop_Dark from '../assets/Chess_bdt60.png';
-// import Bishop_Light from '../assets/Chess_blt60.png';
-// import King_Dark from '../assets/Chess_kdt60.png';
-// import King_Light from '../assets/Chess_klt60.png';
-// import Knight_Dark from '../assets/Chess_ndt60.png';
-// import Knight_Light from '../assets/Chess_nlt60.png';
-// import Queen_Dark from '../assets/Chess_qdt60.png';
-// import Queen_Light from '../assets/Chess_qlt60.png';
-// import Rook_Dark from '../assets/Chess_rdt60.png';
-// import Rook_Light from '../assets/Chess_rlt60.png';
+import Bishop_Dark from '../assets/Chess_bdt60.png';
+import Bishop_Light from '../assets/Chess_blt60.png';
+import King_Dark from '../assets/Chess_kdt60.png';
+import King_Light from '../assets/Chess_klt60.png';
+import Knight_Dark from '../assets/Chess_ndt60.png';
+import Knight_Light from '../assets/Chess_nlt60.png';
+import Queen_Dark from '../assets/Chess_qdt60.png';
+import Queen_Light from '../assets/Chess_qlt60.png';
+import Rook_Dark from '../assets/Chess_rdt60.png';
+import Rook_Light from '../assets/Chess_rlt60.png';
 import Empty from '../assets/Empty.png';
 
 // ACTION CREATORS
 export function switchPlayerMove() {
     initialState.playerOneMove = !initialState.playerOneMove;
     console.log(`It is player one's turn ${initialState.playerOneMove}`);
-}
-
-export function movePiece() {
-    boardValues.e2 = Empty;
-    boardValues.e4 = Pawn_Light;
-    boardValues.e2SquareInfo = 'Empty';
-    boardValues.e4SquareInfo = 'Pawn_Light';
-    return true
 }
 
 export function validSquareSelect(squareData) {
@@ -44,18 +36,22 @@ export function validSquareSelect(squareData) {
     } 
 }
 
-export function checkSelectedSquare(squareData) {
+export function checkSelectedSquare(squareData, squareId) {
     let snip = squareData.length;
 
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === squareData.substring(snip - 2)) {
         console.log('Valid Square has been seleceted.')
-        openMove();
+        openMove()
+        pickUpPiece(squareId)
+        holdPiece(squareData)
         initialState.pieceSelected = squareData
         return initialState.pieceSelected
     } 
     else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === squareData.substring(snip - 2)) {
         console.log('Valid Square has been seleceted.')
-        openMove();
+        openMove()
+        pickUpPiece(squareId)
+        holdPiece(squareData)
         initialState.pieceSelected = squareData
         return initialState.pieceSelected
     } 
@@ -75,4 +71,60 @@ export function resetOpenMove() {
 
 export function resetPieceSelected() {
     initialState.pieceSelected = ''
+}
+
+export function pickUpPiece(squareId) {
+    boardValues[squareId] = Empty
+    boardValues[`${squareId}SquareInfo`] = 'Empty'
+    return true
+}
+
+function holdPiece(squareInfo) {
+    let imageName = squareInfo.split(' ')
+    console.log(imageName)
+    initialState.holdingPiece = imageName[0]
+}
+
+export function replacePieceHeld(squareInfo) {
+    let splitSquareInfo = squareInfo.split(' ')
+    let squareId = splitSquareInfo[1]
+    console.log(splitSquareInfo)
+    boardValues[squareId] = passImage(initialState.holdingPiece)
+    boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
+    return true
+}
+
+function passImage(heldPiece) {
+    switch(heldPiece) {
+        case 'King_Dark':
+          return King_Dark;
+        case 'King_Light':
+          return King_Light;
+        case 'Queen_Dark':
+          return Queen_Dark;
+        case 'Queen_Light':
+          return Queen_Light;
+        case 'Bishop_Dark':
+          return Bishop_Dark;
+        case 'Bishop_Light':
+          return Bishop_Light;
+        case 'Knight_Dark':
+          return Knight_Dark;
+        case 'Knight_Light':
+          return Knight_Light;
+        case 'Rook_Dark':
+          return Rook_Dark;
+        case 'Rook_Light':
+          return Rook_Light;
+        case 'Pawn_Dark':
+          return Pawn_Dark;
+        case 'Pawn_Light':
+          return Pawn_Light;
+        default:
+            return Empty;
+    }
+}
+
+export function releasePiece() {
+    initialState.holdingPiece = ''
 }

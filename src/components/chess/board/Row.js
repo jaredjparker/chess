@@ -23,6 +23,8 @@ export default class Row extends Component {
                     <Squares 
                     key={i}
                     squareSendSelectedPiece={this.props.sendSelectedPiece}
+                    squareStatefulMoves={this.props.rowStatefulMoves}
+                    squareLegalMoves={this.props.rowLegalMoves}
                     snglDigRowId={this.props.numberedRowStr}
                     squareColor={this.state.colorBool === true ? whiteRowArr[i] : blackRowArr[i]} 
                     oneLtrColumnId={id} />

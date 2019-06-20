@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected } from '../../../actions/gameActions';
+import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected, replacePieceHeld, releasePiece } from '../../../actions/gameActions';
 import boardValues from '../../../centralState/boardValues';
 import initialState from '../../../centralState/initialState';
 import './Squares.css';
@@ -9,50 +9,54 @@ export default class Squares extends Component {
     constructor(props) {
       super(props);
 
-      const stateSquareId = `${this.props.oneLtrColumnId}${this.props.snglDigRowId}`;
-      const chessPiece = `${this.props.oneLtrColumnId}${this.props.snglDigRowId}SquareInfo`;
+      const { oneLtrColumnId, snglDigRowId, squareStatefulMoves } = this.props;
+
+      const stateSquareId = `${oneLtrColumnId}${snglDigRowId}`;
+      const chessPiece = `${oneLtrColumnId}${snglDigRowId}SquareInfo`;
 
       this.state = {
           selectedSquare: false,
           squareInfo: '',
           currentPiece: boardValues[chessPiece],
           squareImage: boardValues[stateSquareId],
-          rowId: this.props.snglDigRowId,
-          columnId: this.props.oneLtrColumnId,
+          rowId: snglDigRowId,
+          columnId: oneLtrColumnId,
           squareId: stateSquareId,
-          selectedForMove: false
+          selectedForMove: false,
+          currSquareViable: squareStatefulMoves.includes(stateSquareId)
         };
     }
 
     componentDidMount() {
+      this.props.squareLegalMoves();
       const squareId = `${this.props.oneLtrColumnId}${this.props.snglDigRowId}`;
         switch(squareId) {
           case 'd8':
             return this.setState({ squareInfo: `King_Dark ${squareId}`});
           case 'd1':
-            return this.setState({ squareInfo: `King Light ${squareId}`});
+            return this.setState({ squareInfo: `King_Light ${squareId}`});
           case 'e8':
-            return this.setState({ squareInfo: `Queen Dark ${squareId}`});
+            return this.setState({ squareInfo: `Queen_Dark ${squareId}`});
           case 'e1':
-            return this.setState({ squareInfo: `Queen Light ${squareId}`});
+            return this.setState({ squareInfo: `Queen_Light ${squareId}`});
           case 'c8':
           case 'f8':
-            return this.setState({ squareInfo: `Bishop Dark ${squareId}`});
+            return this.setState({ squareInfo: `Bishop_Dark ${squareId}`});
           case 'c1':
           case 'f1':
-            return this.setState({ squareInfo: `Bishop Light ${squareId}`});
+            return this.setState({ squareInfo: `Bishop_Light ${squareId}`});
           case 'b8':
           case 'g8':
-            return this.setState({ squareInfo: `Knight Dark ${squareId}`});
+            return this.setState({ squareInfo: `Knight_Dark ${squareId}`});
           case 'b1':
           case 'g1':
-            return this.setState({ squareInfo: `Knight Light ${squareId}`});
+            return this.setState({ squareInfo: `Knight_Light ${squareId}`});
           case 'a8':
           case 'h8':
-            return this.setState({ squareInfo: `Rook Dark ${squareId}`});
+            return this.setState({ squareInfo: `Rook_Dark ${squareId}`});
           case 'a1':
           case 'h1':
-            return this.setState({ squareInfo: `Rook Light ${squareId}`});
+            return this.setState({ squareInfo: `Rook_Light ${squareId}`});
           case 'a7':
           case 'b7':
           case 'c7':
@@ -61,7 +65,7 @@ export default class Squares extends Component {
           case 'f7':
           case 'g7':
           case 'h7':
-            return this.setState({ squareInfo: `Pawn Dark ${squareId}`});
+            return this.setState({ squareInfo: `Pawn_Dark ${squareId}`});
           case 'a2':
           case 'b2':
           case 'c2':
@@ -70,11 +74,10 @@ export default class Squares extends Component {
           case 'f2':
           case 'g2':
           case 'h2':
-            return this.setState({ squareInfo: `Pawn Light ${squareId}`});
+            return this.setState({ squareInfo: `Pawn_Light ${squareId}`});
           default:
               return this.setState({ squareInfo: `Empty ${squareId}`});
       }
-
     }
   
     handleMouseEnter = () => {
@@ -94,20 +97,22 @@ export default class Squares extends Component {
     }
 
     handleClick = () => {
-      const { selectedForMove, selectedSquare, squareInfo } = this.state;
-
-      console.log(selectedForMove, squareInfo, initialState.pieceSelected)
+      const { selectedForMove, selectedSquare, squareInfo, squareId } = this.state;
 
       if (selectedForMove === false && initialState.pieceSelected !== squareInfo) {
-        this.props.squareSendSelectedPiece(this.state.squareInfo);
-        checkSelectedSquare(this.state.squareInfo) ? this.setState({selectedForMove: true, selectedSquare: false}) : alert('Please select a valid piece')
+        this.props.squareSendSelectedPiece(squareInfo)
+        checkSelectedSquare(squareInfo, squareId) ? this.setState({selectedForMove: true, selectedSquare: false, squareImage: boardValues[squareId], currentPiece: boardValues[`${squareId}SquareInfo`]}) : alert('Please select a valid piece')
       } else if (selectedForMove === true && selectedSquare === false && initialState.pieceSelected === squareInfo) {
-        console.log(initialState.pieceSelected, 'second condition fired')
+        console.log('Piece has been unselected')
         resetOpenMove()
         resetPieceSelected()
+        replacePieceHeld(squareInfo)
+        releasePiece()
         this.setState({
           selectedForMove: false,
-          selectedSquare: true
+          selectedSquare: true,
+          squareImage: boardValues[squareId],
+          currentPiece: boardValues[`${squareId}SquareInfo`]
         })
       }
     }
@@ -115,69 +120,68 @@ export default class Squares extends Component {
     piecesPlacement( squareId ) {
       const { squareImage, currentPiece } = this.state;
 
-        switch(squareId) {
-            case 'd8':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`King Dark ${squareId}`} value={squareId} src={squareImage} />;
-            case 'd1':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`King Light ${squareId}`} value={squareId} src={squareImage} />;
-            case 'e8':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Queen Dark ${squareId}`} value={squareId} src={squareImage} />;
-            case 'e1':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Queen Light ${squareId}`} value={squareId} src={squareImage} />;
-            case 'c8':
-            case 'f8':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Bishop Dark ${squareId}`} value={squareId} src={squareImage} />;
-            case 'c1':
-            case 'f1':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Bishop Light ${squareId}`} value={squareId} src={squareImage} />;
-            case 'b8':
-            case 'g8':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Knight Dark ${squareId}`} value={squareId} src={squareImage} />;
-            case 'b1':
-            case 'g1':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Knight Light ${squareId}`} value={squareId} src={squareImage} />;
-            case 'a8':
-            case 'h8':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Rook Dark ${squareId}`} value={squareId} src={squareImage} />;
-            case 'a1':
-            case 'h1':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Rook Light ${squareId}`} value={squareId} src={squareImage} />;
-            case 'a7':
-            case 'b7':
-            case 'c7':
-            case 'd7':
-            case 'e7':
-            case 'f7':
-            case 'g7':
-            case 'h7':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Pawn Dark ${squareId}`} value={squareId} src={squareImage} />;
-            case 'a2':
-            case 'b2':
-            case 'c2':
-            case 'd2':
-            case 'e2':
-            case 'f2':
-            case 'g2':
-            case 'h2':
-              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Pawn Light ${squareId}`} value={squareId} src={squareImage} />;
-            default:
-                return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Empty ${squareId}`} value={squareId} src={squareImage} />
-        }
+      switch(squareId) {
+          case 'd8':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`King Dark ${squareId}`} value={squareId} src={squareImage} />;
+          case 'd1':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`King Light ${squareId}`} value={squareId} src={squareImage} />;
+          case 'e8':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Queen Dark ${squareId}`} value={squareId} src={squareImage} />;
+          case 'e1':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Queen Light ${squareId}`} value={squareId} src={squareImage} />;
+          case 'c8':
+          case 'f8':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Bishop Dark ${squareId}`} value={squareId} src={squareImage} />;
+          case 'c1':
+          case 'f1':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Bishop Light ${squareId}`} value={squareId} src={squareImage} />;
+          case 'b8':
+          case 'g8':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Knight Dark ${squareId}`} value={squareId} src={squareImage} />;
+          case 'b1':
+          case 'g1':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Knight Light ${squareId}`} value={squareId} src={squareImage} />;
+          case 'a8':
+          case 'h8':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Rook Dark ${squareId}`} value={squareId} src={squareImage} />;
+          case 'a1':
+          case 'h1':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Rook Light ${squareId}`} value={squareId} src={squareImage} />;
+          case 'a7':
+          case 'b7':
+          case 'c7':
+          case 'd7':
+          case 'e7':
+          case 'f7':
+          case 'g7':
+          case 'h7':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Pawn Dark ${squareId}`} value={squareId} src={squareImage} />;
+          case 'a2':
+          case 'b2':
+          case 'c2':
+          case 'd2':
+          case 'e2':
+          case 'f2':
+          case 'g2':
+          case 'h2':
+            return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Pawn Light ${squareId}`} value={squareId} src={squareImage} />;
+          default:
+              return <img style={currentPiece.includes('Empty') ? {opacity: 0} : {opacity: 1}} alt={`Empty ${squareId}`} value={squareId} src={squareImage} />
       }
+    }
       
-      
-
     render() {
         
         const { squareColor, oneLtrColumnId, snglDigRowId } = this.props;
+        const { selectedSquare, selectedForMove, currSquareViable } = this.state;
           
         return (
             <div 
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
                 onClick={this.handleClick}
-                className={this.state.selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
-                style={this.state.selectedForMove ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
+                className={selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
+                style={selectedForMove || currSquareViable ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
                 value={`${oneLtrColumnId}${snglDigRowId}`}
             >
                 <p>{`${oneLtrColumnId}${snglDigRowId}`}</p>
