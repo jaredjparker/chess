@@ -17,12 +17,12 @@ import Empty from '../assets/Empty.png';
 
 // ACTION CREATORS
 export function switchPlayerMove() {
-    initialState.playerOneMove = !initialState.playerOneMove;
-    console.log(`It is player one's turn ${initialState.playerOneMove}`);
+    initialState.playerOneMove = !initialState.playerOneMove
+    console.log(`It is player one's turn ${initialState.playerOneMove}`)
 }
 
 export function validSquareSelect(squareData) {
-    let snip = squareData.length;
+    let snip = squareData.length
 
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === '') {
         console.log('Hovering over Valid Square')
@@ -37,7 +37,7 @@ export function validSquareSelect(squareData) {
 }
 
 export function checkSelectedSquare(squareData, squareId) {
-    let snip = squareData.length;
+    let snip = squareData.length
 
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === squareData.substring(snip - 2)) {
         console.log('Valid Square has been seleceted.')
@@ -81,16 +81,13 @@ export function pickUpPiece(squareId) {
 
 function holdPiece(squareInfo) {
     let imageName = squareInfo.split(' ')
-    console.log(imageName)
     initialState.holdingPiece = imageName[0]
 }
 
 export function replacePieceHeld(squareInfo) {
-    let splitSquareInfo = squareInfo.split(' ')
-    let squareId = splitSquareInfo[1]
-    console.log(splitSquareInfo)
-    boardValues[squareId] = passImage(initialState.holdingPiece)
-    boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
+    let splitSquareInfo = squareInfo.split(' ')[1]
+    boardValues[splitSquareInfo] = passImage(initialState.holdingPiece)
+    boardValues[`${splitSquareInfo}SquareInfo`] = initialState.holdingPiece
     return true
 }
 
@@ -127,4 +124,19 @@ function passImage(heldPiece) {
 
 export function releasePiece() {
     initialState.holdingPiece = ''
+}
+
+export function handleValidSquareMove() {
+  movePieceToSquare()
+}
+
+export function passHoveringSquareInfo(squareInfo) {
+  initialState.hoveringOverSquare = squareInfo
+}
+
+function movePieceToSquare() {
+  let squareId = initialState.hoveringOverSquare.split(' ')[1]
+  console.log(initialState.pieceSelected, initialState.holdingPiece, squareId, "Move Piece to Square Fired")
+  boardValues[squareId] = passImage(initialState.holdingPiece)
+  boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
 }

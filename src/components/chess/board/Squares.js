@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected, replacePieceHeld, releasePiece } from '../../../actions/gameActions';
+import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected, replacePieceHeld, releasePiece, handleValidSquareMove, passHoveringSquareInfo } from '../../../actions/gameActions';
 import boardValues from '../../../centralState/boardValues';
 import initialState from '../../../centralState/initialState';
 import './Squares.css';
@@ -22,8 +22,7 @@ export default class Squares extends Component {
           rowId: snglDigRowId,
           columnId: oneLtrColumnId,
           squareId: stateSquareId,
-          selectedForMove: false,
-          currSquareViable: squareStatefulMoves.includes(stateSquareId)
+          selectedForMove: false
         };
     }
 
@@ -81,9 +80,11 @@ export default class Squares extends Component {
     }
   
     handleMouseEnter = () => {
+      const { squareInfo } = this.state;
       const squareId = `${this.props.oneLtrColumnId}${this.props.snglDigRowId}`;
 
-      validSquareSelect(this.state.squareInfo) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection');
+      passHoveringSquareInfo(squareInfo)
+      validSquareSelect(squareInfo) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection');
 
       this.setState({
         squareImage: boardValues[squareId],
@@ -99,15 +100,24 @@ export default class Squares extends Component {
     handleClick = () => {
       const { selectedForMove, selectedSquare, squareInfo, squareId } = this.state;
 
-      if (selectedForMove === false && initialState.pieceSelected !== squareInfo) {
+      if (selectedForMove === false && initialState.pieceSelected !== squareInfo && initialState.moveOpen === false) {
         this.props.squareSendSelectedPiece(squareInfo)
-        checkSelectedSquare(squareInfo, squareId) ? this.setState({selectedForMove: true, selectedSquare: false, squareImage: boardValues[squareId], currentPiece: boardValues[`${squareId}SquareInfo`]}) : alert('Please select a valid piece')
+        checkSelectedSquare(squareInfo, squareId) ? this.setState({selectedForMove: true, selectedSquare: false, squareImage: boardValues[squareId], currentPiece: boardValues[`${squareId}SquareInfo`]}) : alert('Please select a valid square')
       } else if (selectedForMove === true && selectedSquare === false && initialState.pieceSelected === squareInfo) {
         console.log('Piece has been unselected')
         resetOpenMove()
         resetPieceSelected()
         replacePieceHeld(squareInfo)
         releasePiece()
+        this.setState({
+          selectedForMove: false,
+          selectedSquare: true,
+          squareImage: boardValues[squareId],
+          currentPiece: boardValues[`${squareId}SquareInfo`]
+        })
+      } else if (initialState.pieceSelected !== squareInfo && initialState.moveOpen === true) {
+        console.log('Piece has been moved')
+        handleValidSquareMove()
         this.setState({
           selectedForMove: false,
           selectedSquare: true,
@@ -173,7 +183,7 @@ export default class Squares extends Component {
     render() {
         
         const { squareColor, oneLtrColumnId, snglDigRowId } = this.props;
-        const { selectedSquare, selectedForMove, currSquareViable } = this.state;
+        const { selectedSquare, selectedForMove } = this.state;
           
         return (
             <div 
@@ -181,7 +191,7 @@ export default class Squares extends Component {
                 onMouseLeave={this.handleMouseLeave}
                 onClick={this.handleClick}
                 className={selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
-                style={selectedForMove || currSquareViable ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
+                style={selectedForMove ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
                 value={`${oneLtrColumnId}${snglDigRowId}`}
             >
                 <p>{`${oneLtrColumnId}${snglDigRowId}`}</p>
