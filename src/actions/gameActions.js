@@ -128,6 +128,22 @@ export function releasePiece() {
 
 export function handleValidSquareMove() {
   movePieceToSquare()
+  resetSquareSelected()
+  closeMove()
+  switchPlayerTurn()
+}
+
+function resetSquareSelected() {
+    initialState.squareSelected = ''
+}
+
+function closeMove() {
+    initialState.moveOpen = false
+}
+
+function switchPlayerTurn() {
+    initialState.playerOneMove = !initialState.playerOneMove
+    console.log(initialState.playerOneMove)
 }
 
 export function passHoveringSquareInfo(squareInfo) {
@@ -136,7 +152,10 @@ export function passHoveringSquareInfo(squareInfo) {
 
 function movePieceToSquare() {
   let squareId = initialState.hoveringOverSquare.split(' ')[1]
-  console.log(initialState.pieceSelected, initialState.holdingPiece, squareId, "Move Piece to Square Fired")
   boardValues[squareId] = passImage(initialState.holdingPiece)
   boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
+}
+
+export function addToClickHistory(squareId) {
+    initialState.clickHistory.push(squareId)
 }

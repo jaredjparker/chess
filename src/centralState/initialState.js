@@ -6,6 +6,7 @@ const initialState = {
     holdingPiece: '',
     moveOpen: false,
     hoveringOverSquare: '',
+    clickHistory: [],
     validMoves: []
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected, replacePieceHeld, releasePiece, handleValidSquareMove, passHoveringSquareInfo } from '../../../actions/gameActions';
+import { validSquareSelect, unselectSquare, checkSelectedSquare, resetOpenMove, resetPieceSelected, replacePieceHeld, releasePiece, handleValidSquareMove, passHoveringSquareInfo, addToClickHistory } from '../../../actions/gameActions';
 import boardValues from '../../../centralState/boardValues';
 import initialState from '../../../centralState/initialState';
 import './Squares.css';
@@ -9,7 +9,7 @@ export default class Squares extends Component {
     constructor(props) {
       super(props);
 
-      const { oneLtrColumnId, snglDigRowId, squareStatefulMoves } = this.props;
+      const { oneLtrColumnId, snglDigRowId } = this.props;
 
       const stateSquareId = `${oneLtrColumnId}${snglDigRowId}`;
       const chessPiece = `${oneLtrColumnId}${snglDigRowId}SquareInfo`;
@@ -98,31 +98,37 @@ export default class Squares extends Component {
     }
 
     handleClick = () => {
-      const { selectedForMove, selectedSquare, squareInfo, squareId } = this.state;
+      const { selectedForMove, selectedSquare, squareInfo, squareId } = this.state
+      const clickHistLngth = initialState.clickHistory.length
 
       if (selectedForMove === false && initialState.pieceSelected !== squareInfo && initialState.moveOpen === false) {
         this.props.squareSendSelectedPiece(squareInfo)
-        checkSelectedSquare(squareInfo, squareId) ? this.setState({selectedForMove: true, selectedSquare: false, squareImage: boardValues[squareId], currentPiece: boardValues[`${squareId}SquareInfo`]}) : alert('Please select a valid square')
-      } else if (selectedForMove === true && selectedSquare === false && initialState.pieceSelected === squareInfo) {
+        checkSelectedSquare(squareInfo, squareId) ? this.setState({selectedForMove: true, selectedSquare: false, squareImage: boardValues[squareId], currentPiece: boardValues[`${squareId}SquareInfo`], squareInfo: boardValues[`${squareId}SquareInfo`]}) : alert('Please select a valid square')
+        addToClickHistory(squareId)
+      } else if (selectedForMove === true && selectedSquare === false && initialState.pieceSelected === squareInfo && initialState.clickHistory[clickHistLngth - 1] === squareId) {
         console.log('Piece has been unselected')
         resetOpenMove()
         resetPieceSelected()
         replacePieceHeld(squareInfo)
         releasePiece()
+        addToClickHistory(squareId)
         this.setState({
           selectedForMove: false,
           selectedSquare: true,
           squareImage: boardValues[squareId],
-          currentPiece: boardValues[`${squareId}SquareInfo`]
+          currentPiece: boardValues[`${squareId}SquareInfo`],
+          squareInfo: boardValues[`${squareId}SquareInfo`]
         })
       } else if (initialState.pieceSelected !== squareInfo && initialState.moveOpen === true) {
         console.log('Piece has been moved')
         handleValidSquareMove()
+        addToClickHistory(squareId)
         this.setState({
           selectedForMove: false,
           selectedSquare: true,
           squareImage: boardValues[squareId],
-          currentPiece: boardValues[`${squareId}SquareInfo`]
+          currentPiece: boardValues[`${squareId}SquareInfo`], 
+          squareInfo: boardValues[`${squareId}SquareInfo`],
         })
       }
     }
@@ -183,7 +189,7 @@ export default class Squares extends Component {
     render() {
         
         const { squareColor, oneLtrColumnId, snglDigRowId } = this.props;
-        const { selectedSquare, selectedForMove } = this.state;
+        const { selectedSquare } = this.state;
           
         return (
             <div 
@@ -191,7 +197,8 @@ export default class Squares extends Component {
                 onMouseLeave={this.handleMouseLeave}
                 onClick={this.handleClick}
                 className={selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
-                style={selectedForMove ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
+                // style={selectedForMove ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
+                style={{backgroundColor: squareColor}} 
                 value={`${oneLtrColumnId}${snglDigRowId}`}
             >
                 <p>{`${oneLtrColumnId}${snglDigRowId}`}</p>
