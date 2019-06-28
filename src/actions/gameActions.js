@@ -21,25 +21,22 @@ export function switchPlayerMove() {
     console.log(`It is player one's turn ${initialState.playerOneMove}`)
 }
 
-export function validSquareSelect(squareData) {
-    let snip = squareData.length
+export function validSquareSelect(squareData, squareId) {
 
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === '') {
         console.log('Hovering over Valid Square')
-        initialState.squareSelected = squareData.substring(snip - 2)
+        initialState.squareSelected = squareId
         return initialState.squareSelected
     } 
     else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === '') {
         console.log('Hovering over Valid Square')
-        initialState.squareSelected = squareData.substring(snip - 2)
+        initialState.squareSelected = squareId
         return initialState.squareSelected
     } 
 }
 
 export function checkSelectedSquare(squareData, squareId) {
-    let snip = squareData.length
-
-    if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === squareData.substring(snip - 2)) {
+    if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === squareId) {
         console.log('Valid Square has been seleceted.')
         openMove()
         pickUpPiece(squareId)
@@ -47,7 +44,7 @@ export function checkSelectedSquare(squareData, squareId) {
         initialState.pieceSelected = squareData
         return initialState.pieceSelected
     } 
-    else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === squareData.substring(snip - 2)) {
+    else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === squareId) {
         console.log('Valid Square has been seleceted.')
         openMove()
         pickUpPiece(squareId)
@@ -84,10 +81,9 @@ function holdPiece(squareInfo) {
     initialState.holdingPiece = imageName[0]
 }
 
-export function replacePieceHeld(squareInfo) {
-    let splitSquareInfo = squareInfo.split(' ')[1]
-    boardValues[splitSquareInfo] = passImage(initialState.holdingPiece)
-    boardValues[`${splitSquareInfo}SquareInfo`] = initialState.holdingPiece
+export function replacePieceHeld(squareId) {
+    boardValues[squareId] = passImage(initialState.holdingPiece)
+    boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
     return true
 }
 
@@ -126,8 +122,8 @@ export function releasePiece() {
     initialState.holdingPiece = ''
 }
 
-export function handleValidSquareMove() {
-  movePieceToSquare()
+export function handleValidSquareMove(squareId) {
+  movePieceToSquare(squareId)
   resetSquareSelected()
   closeMove()
   switchPlayerTurn()
@@ -143,17 +139,16 @@ function closeMove() {
 
 function switchPlayerTurn() {
     initialState.playerOneMove = !initialState.playerOneMove
-    console.log(initialState.playerOneMove)
 }
 
 export function passHoveringSquareInfo(squareInfo) {
   initialState.hoveringOverSquare = squareInfo
 }
 
-function movePieceToSquare() {
-  let squareId = initialState.hoveringOverSquare.split(' ')[1]
+function movePieceToSquare(squareId) {
   boardValues[squareId] = passImage(initialState.holdingPiece)
   boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
+  console.log(squareId, initialState.holdingPiece, initialState.hoveringOverSquare)
 }
 
 export function addToClickHistory(squareId) {

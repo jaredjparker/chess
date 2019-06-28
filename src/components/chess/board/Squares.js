@@ -80,16 +80,16 @@ export default class Squares extends Component {
     }
   
     handleMouseEnter = () => {
-      const { squareInfo } = this.state;
-      const squareId = `${this.props.oneLtrColumnId}${this.props.snglDigRowId}`;
+      const { squareInfo, squareId } = this.state;
 
       passHoveringSquareInfo(squareInfo)
-      validSquareSelect(squareInfo) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection');
+      validSquareSelect(squareInfo, squareId) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection');
 
       this.setState({
         squareImage: boardValues[squareId],
         currentPiece: boardValues[`${squareId}SquareInfo`]
       })
+      console.log(this.state)
     }
 
     handleMouseLeave = () => {
@@ -109,7 +109,7 @@ export default class Squares extends Component {
         console.log('Piece has been unselected')
         resetOpenMove()
         resetPieceSelected()
-        replacePieceHeld(squareInfo)
+        replacePieceHeld(squareId)
         releasePiece()
         addToClickHistory(squareId)
         this.setState({
@@ -121,7 +121,7 @@ export default class Squares extends Component {
         })
       } else if (initialState.pieceSelected !== squareInfo && initialState.moveOpen === true) {
         console.log('Piece has been moved')
-        handleValidSquareMove()
+        handleValidSquareMove(squareId)
         addToClickHistory(squareId)
         this.setState({
           selectedForMove: false,
