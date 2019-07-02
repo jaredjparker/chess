@@ -197,11 +197,10 @@ export default class Squares extends Component {
                 onMouseLeave={this.handleMouseLeave}
                 onClick={this.handleClick}
                 className={selectedSquare ? 'individual-square selected-square' : 'individual-square'} 
-                // style={selectedForMove ? {backgroundColor: 'yellow'} : {backgroundColor: squareColor}} 
                 style={{backgroundColor: squareColor}} 
                 value={`${oneLtrColumnId}${snglDigRowId}`}
             >
-                <p>{`${oneLtrColumnId}${snglDigRowId}`}</p>
+                {/* <p>{`${oneLtrColumnId}${snglDigRowId}`}</p> */}
 
                 {this.piecesPlacement(`${oneLtrColumnId}${snglDigRowId}`)}
                 

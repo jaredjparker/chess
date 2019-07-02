@@ -21,6 +21,7 @@
 
 .individual-square > img {
     margin-left: 13px;
+    margin-top: 13px;
 }
 
 .selected-square {

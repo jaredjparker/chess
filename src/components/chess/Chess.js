@@ -5,10 +5,8 @@ import './Chess.css';
 export default class Chess extends Component {
     render() {
         return (
-            <div>
-                <h1>Chess</h1>
+            <div className="chess-wrapper">
                 <Board />
-                
             </div>
         )
     }
