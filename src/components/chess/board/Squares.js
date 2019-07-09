@@ -89,7 +89,6 @@ export default class Squares extends Component {
         squareImage: boardValues[squareId],
         currentPiece: boardValues[`${squareId}SquareInfo`]
       })
-      console.log(initialState)
     }
 
     handleMouseLeave = () => {

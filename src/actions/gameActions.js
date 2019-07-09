@@ -148,7 +148,6 @@ export function passHoveringSquareInfo(squareInfo) {
 function movePieceToSquare(squareId) {
   boardValues[squareId] = passImage(initialState.holdingPiece)
   boardValues[`${squareId}SquareInfo`] = initialState.holdingPiece
-  console.log(squareId, initialState.holdingPiece, initialState.hoveringOverSquare)
 }
 
 export function addToClickHistory(squareId) {
