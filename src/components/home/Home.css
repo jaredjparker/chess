@@ -1,5 +1,19 @@
+#home-page {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 2em;
+    margin: 3em;
+}
+
+#home-page > h1 {
+    margin-top: 0;
+}
+
 #home-page > * {
     width: 38rem;
+}
+
+.md-scrn {
+    display: none;
 }
 
 button {
@@ -9,8 +23,6 @@ button {
     background-color: #1976d2;
     padding: 6px 16px;
     font-size: 0.975rem;
-    min-width: 64px;
-    width: 18rem !important;
     box-sizing: border-box;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     font-weight: 500;
@@ -18,9 +30,30 @@ button {
     border-radius: 4px;
     letter-spacing: 0.02857em;
     border: 0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
 }
 
 a {
     text-decoration: none;
+}
+
+@media screen and (max-width: 999px) {
+    #home-page {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin: 1em .5em .25em .5em;
+        padding: 1em;
+    }
+
+    #home-page > * {
+        width: auto;
+    }
+
+    .md-scrn {
+        display: block;
+    }
+    
+    .lrg-scrn {
+        display: none;
+    }
 }
