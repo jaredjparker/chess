@@ -83,11 +83,12 @@ export default class Squares extends Component {
       const { squareInfo, squareId } = this.state;
 
       passHoveringSquareInfo(squareInfo)
-      validSquareSelect(squareInfo, squareId) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection');
+      // validSquareSelect(squareInfo, squareId) ? this.setState({selectedSquare: true}) : console.log('Invalid Selection')
 
       this.setState({
         squareImage: boardValues[squareId],
-        currentPiece: boardValues[`${squareId}SquareInfo`]
+        currentPiece: boardValues[`${squareId}SquareInfo`],
+        selectedSquare: validSquareSelect(squareInfo, squareId)
       })
     }
 
