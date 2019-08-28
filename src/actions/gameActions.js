@@ -18,18 +18,18 @@ import Empty from '../assets/Empty.png';
 // ACTION CREATORS
 export function switchPlayerMove() {
     initialState.playerOneMove = !initialState.playerOneMove
-    console.log(`It is player one's turn ${initialState.playerOneMove}`)
+    // console.log(`It is player one's turn ${initialState.playerOneMove}`)
 }
 
 export function validSquareSelect(squareData, squareId) {
 
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === '') {
-        console.log('Hovering over Valid Square')
+        // console.log('Hovering over Valid Square')
         initialState.squareSelected = squareId
         return initialState.squareSelected
     } 
     else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === '') {
-        console.log('Hovering over Valid Square')
+        // console.log('Hovering over Valid Square')
         initialState.squareSelected = squareId
         return initialState.squareSelected
     } 
@@ -37,7 +37,7 @@ export function validSquareSelect(squareData, squareId) {
 
 export function checkSelectedSquare(squareData, squareId) {
     if (initialState.playerOneMove === true && squareData.includes('Light') && initialState.squareSelected === squareId) {
-        console.log('Valid Square has been seleceted.')
+        // console.log('Valid Square has been seleceted.')
         openMove()
         pickUpPiece(squareId)
         holdPiece(squareData)
@@ -45,7 +45,7 @@ export function checkSelectedSquare(squareData, squareId) {
         return initialState.pieceSelected
     } 
     else if (initialState.playerOneMove === false && squareData.includes('Dark') && initialState.squareSelected === squareId) {
-        console.log('Valid Square has been seleceted.')
+        // console.log('Valid Square has been seleceted.')
         openMove()
         pickUpPiece(squareId)
         holdPiece(squareData)

@@ -105,7 +105,7 @@ export default class Squares extends Component {
         checkSelectedSquare(squareInfo, squareId) ? this.setState({selectedForMove: true, selectedSquare: false, squareImage: boardValues[squareId], currentPiece: boardValues[`${squareId}SquareInfo`], squareInfo: boardValues[`${squareId}SquareInfo`]}) : alert('Please select a valid square')
         addToClickHistory(squareId)
       } else if (selectedForMove === true && selectedSquare === false && initialState.clickHistory[clickHistLngth - 1] === squareId) {
-        console.log('Piece has been unselected')
+        // console.log('Piece has been unselected')
         resetOpenMove()
         resetPieceSelected()
         replacePieceHeld(squareId)
@@ -119,7 +119,7 @@ export default class Squares extends Component {
           squareInfo: boardValues[`${squareId}SquareInfo`]
         })
       } else if ( initialState.clickHistory[clickHistLngth - 1] !== squareId && initialState.moveOpen === true) {
-        console.log('Piece has been moved')
+        // console.log('Piece has been moved')
         handleValidSquareMove(squareId)
         addToClickHistory(squareId)
         this.setState({
